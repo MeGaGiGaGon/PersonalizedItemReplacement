@@ -15,6 +15,7 @@ namespace PersonalizedItemReplacement
     [BepInDependency(R2API.R2API.PluginGUID)]
     [BepInDependency("com.rune580.riskofoptions")]
     [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
+    [NetworkCompatibility(CompatibilityLevel.NoNeedForSync, VersionStrictness.DifferentModVersionsAreOk)]
     public class PersonalizedItemReplacement : BaseUnityPlugin
     {
         public const string PluginGUID = PluginAuthor + "." + PluginName;
@@ -47,7 +48,8 @@ namespace PersonalizedItemReplacement
             {
                 CharacterBody body = CharacterBody.readOnlyInstancesList.ToList().Find(x => x.inventory == self);
                 int e_stacks = self.GetItemCount(DLC1Content.Items.RandomlyLunar);
-                if (body != null && e_stacks > 0 && ItemCatalog.GetItemDef(itemIndex).tier != ItemTier.Lunar)
+                ItemDef item = ItemCatalog.GetItemDef(itemIndex);
+                if (body != null && e_stacks > 0 && item.tier != ItemTier.Lunar && item.DoesNotContainTag(ItemTag.Scrap))
                 {
                     if (Run.instance != null)
                     {
